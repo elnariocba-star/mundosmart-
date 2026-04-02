@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo de Precios · Mundo Smart</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: #2a2a3a;
+    --accent: #00e5ff;
+    --accent2: #ff3cac;
+    --accent3: #7b5ea7;
+    --text: #e8e8f0;
+    --muted: #7070a0;
+    --green: #00ffa3;
+    --yellow: #ffd60a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+  }
+
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+
+  .logo span {
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(0,229,255,0.5);
+  }
+
+  .cotiz-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0,229,255,0.06);
+    border: 1px solid rgba(0,229,255,0.2);
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 0.85rem;
+  }
+
+  .cotiz-label { color: var(--muted); }
+  .cotiz-value {
+    font-family: 'Space Mono', monospace;
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  /* SEARCH + FILTERS */
+  .controls {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 28px 40px 0;
+  }
+
+  .search-wrap {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    color: var(--muted);
+  }
+
+  #searchInput {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    padding: 16px 20px 16px 48px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  #searchInput:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,229,255,0.08);
+  }
+
+  #searchInput::placeholder { color: var(--muted); }
+
+  .filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+
+  .filter-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 50px;
+    padding: 9px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 700;
+    box-shadow: 0 0 16px rgba(0,229,255,0.3);
+  }
+
+  .filter-btn.brand-xiaomi.active { background: #ff6900; border-color: #ff6900; box-shadow: 0 0 16px rgba(255,105,0,0.3); }
+  .filter-btn.brand-motorola.active { background: #005af0; border-color: #005af0; box-shadow: 0 0 16px rgba(0,90,240,0.3); }
+  .filter-btn.brand-samsung.active { background: #1428a0; border-color: #1428a0; box-shadow: 0 0 16px rgba(20,40,160,0.3); }
+  .filter-btn.brand-iphone.active { background: #e8e8f0; border-color: #e8e8f0; color: #000; box-shadow: 0 0 16px rgba(232,232,240,0.3); }
+  .filter-btn.brand-notebook.active { background: #7b5ea7; border-color: #7b5ea7; box-shadow: 0 0 16px rgba(123,94,167,0.3); }
+  .filter-btn.brand-huawei.active { background: #cf0a2c; border-color: #cf0a2c; box-shadow: 0 0 16px rgba(207,10,44,0.3); }
+  .filter-btn.brand-google.active { background: #34a853; border-color: #34a853; box-shadow: 0 0 16px rgba(52,168,83,0.3); }
+
+  /* SECTIONS */
+  main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px 60px;
+  }
+
+  .section-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 32px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  /* GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 14px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+    animation: fadeIn 0.3s ease both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:hover {
+    border-color: rgba(0,229,255,0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,229,255,0.06);
+  }
+
+  .card-brand {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+    width: fit-content;
+  }
+
+  .brand-xiaomi-tag { background: rgba(255,105,0,0.15); color: #ff8c42; }
+  .brand-motorola-tag { background: rgba(0,90,240,0.15); color: #4d9aff; }
+  .brand-samsung-tag { background: rgba(20,40,160,0.15); color: #8899ff; }
+  .brand-iphone-tag { background: rgba(232,232,240,0.1); color: #c8c8e0; }
+  .brand-notebook-tag { background: rgba(123,94,167,0.15); color: #b094d4; }
+  .brand-huawei-tag { background: rgba(207,10,44,0.15); color: #ff5a72; }
+  .brand-google-tag { background: rgba(52,168,83,0.15); color: #5ecf7a; }
+
+  .card-name {
+    font-size: 0.97rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .card-prices {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .price-usd {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  .price-usd::before { content: 'U$D '; font-size: 0.7rem; opacity: 0.7; }
+
+  .price-ars {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .price-ars-val { color: var(--yellow); font-weight: 700; }
+
+  /* PAYMENT INFO */
+  .info-bar {
+    max-width: 1400px;
+    margin: 24px auto 0;
+    padding: 0 40px;
+  }
+
+  .info-cards {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 0.83rem;
+    color: var(--muted);
+    flex: 1;
+    min-width: 160px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .info-card .icon { font-size: 1.2rem; }
+
+  .info-card strong { color: var(--text); display: block; font-size: 0.9rem; }
+
+  /* GARANTIAS */
+  .garantias {
+    max-width: 1400px;
+    margin: 20px auto 0;
+    padding: 0 40px;
+  }
+
+  .garantia-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .garantia-item {
+    background: rgba(0,255,163,0.04);
+    border: 1px solid rgba(0,255,163,0.15);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 0.82rem;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* EMPTY */
+  .empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--muted);
+    grid-column: 1/-1;
+  }
+
+  .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+
+  /* COUNT */
+  .results-count {
+    font-size: 0.83rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .results-count span { color: var(--accent); font-weight: 600; }
+
+  /* WHATSAPP FLOAT */
+  .wa-float {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: #25d366;
+    color: white;
+    border-radius: 50px;
+    padding: 14px 22px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 24px rgba(37,211,102,0.4);
+    text-decoration: none;
+    z-index: 200;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .wa-float:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(37,211,102,0.5);
+  }
+
+  @media (max-width: 768px) {
+    header, .controls, main, .info-bar, .garantias { padding-left: 16px; padding-right: 16px; }
+    .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .logo { font-size: 1.1rem; }
+  }
+
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">MUNDO<span>_</span>SMART</div>
+    <div class="cotiz-badge">
+      <span class="cotiz-label">💵 Cotización del día</span>
+      <span class="cotiz-value">$1.430</span>
+    </div>
+  </div>
+</header>
+
+<div class="info-bar">
+  <div class="info-cards">
+    <div class="info-card"><span class="icon">💸</span><div><strong>Dólares azules/verdes cara grande</strong>Al tipo de cambio del día</div></div>
+    <div class="info-card"><span class="icon">💵</span><div><strong>Dólares cara chica</strong>5% adicional</div></div>
+    <div class="info-card"><span class="icon">🧰</span><div><strong>USDT</strong>Cripto aceptado</div></div>
+    <div class="info-card"><span class="icon">🏦</span><div><strong>Transferencia en pesos</strong>Al tipo de cambio</div></div>
+  </div>
+</div>
+
+<div class="garantias">
+  <div class="garantia-grid">
+    <div class="garantia-item">📱 Xiaomi — 3 meses (10 días cambio directo)</div>
+    <div class="garantia-item">🍎 iPhone — 1 año oficial</div>
+    <div class="garantia-item">📱 Samsung Nacional — 1 año</div>
+    <div class="garantia-item">🔄 Usados — 60 días de prueba</div>
+    <div class="garantia-item">⌚ Equipos se encargan 1 hora antes de retirar</div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Buscar por modelo, specs, marca…" oninput="renderAll()">
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all', this)">Todos</button>
+    <button class="filter-btn brand-xiaomi" onclick="setFilter('xiaomi', this)">📱 Xiaomi</button>
+    <button class="filter-btn brand-motorola" onclick="setFilter('motorola', this)">📱 Motorola</button>
+    <button class="filter-btn brand-samsung" onclick="setFilter('samsung', this)">📱 Samsung</button>
+    <button class="filter-btn brand-iphone" onclick="setFilter('iphone', this)">🍎 iPhone</button>
+    <button class="filter-btn brand-notebook" onclick="setFilter('notebook', this)">💻 Notebooks</button>
+    <button class="filter-btn brand-huawei" onclick="setFilter('huawei', this)">📱 Huawei</button>
+    <button class="filter-btn brand-google" onclick="setFilter('google', this)">📱 Google</button>
+  </div>
+  <div class="results-count" id="countLabel"></div>
+</div>
+
+<main id="mainContent"></main>
+
+<a class="wa-float" href="https://wa.me/543517516612" target="_blank">
+  💬 Consultar por WhatsApp
+</a>
+
+<script>
+const COTIZ = 1430;
+
+const data = {
+  notebook: [
+    { name: 'ASUS imaginebook MJ401T Intel M3 8th Gen 14" 4GB RAM 128GB SSD', usd: null, ars: 135000 },
+    { name: 'DELL Core i5 1035G4 10ma 14" 4GB 128GB SSD Win10', usd: null, ars: 195000 },
+    { name: 'Gateway GWTN156 AMD Ryzen™ 5 3450U 2.1GHz 256GB SSD 16GB 15.6" FHD', usd: null, ars: 160000 },
+  ],
+  xiaomi: [
+    { name: 'Redmi 15C 256/8GB', usd: 180 },
+    { name: 'Note 14 256/8GB', usd: 225 },
+    { name: 'Note 14 256/8GB 5G', usd: 260 },
+    { name: 'Note 14 Pro 256/8GB', usd: 290 },
+    { name: 'Note 14 Pro 5G 256/8GB', usd: 325 },
+    { name: 'Note 14 Pro 5G 512/12GB', usd: 375 },
+    { name: 'Note 14 Pro Plus 5G 256/8GB', usd: 365 },
+    { name: 'Note 14 Pro Plus 5G 512/12GB', usd: 420 },
+    { name: 'Note 14S 256/8GB', usd: 240 },
+    { name: 'Note 15 256/8GB', usd: 280 },
+    { name: 'Note 15 Pro 256/8GB', usd: 325 },
+    { name: 'Note 15 Pro 256/8GB 5G', usd: 375 },
+    { name: 'Note 15 Pro Plus 256/12GB 5G', usd: 450 },
+    { name: 'Note 15 Pro Plus 512/12GB 5G', usd: 500 },
+    { name: 'Poco C75 256/8GB', usd: 165 },
+    { name: 'Poco C85 256/8GB', usd: 190 },
+    { name: 'Poco F7 512/12GB 5G', usd: 550 },
+    { name: 'Poco F7 Pro 256/12GB 5G', usd: 530 },
+    { name: 'Poco F7 Pro 512/12GB 5G', usd: 620 },
+    { name: 'Poco X7 512/12GB 5G', usd: 355 },
+    { name: 'Poco F8 Pro 256/12GB 5G', usd: 620 },
+    { name: 'Poco F8 Pro 512/12GB 5G', usd: 750 },
+    { name: 'Poco F8 Ultra 512/16GB 5G', usd: 950 },
+    { name: 'Poco X7 5G 256/8GB', usd: 320 },
+    { name: 'Poco X7 Pro 5G 256/12GB', usd: 390 },
+    { name: 'Poco X7 Pro 5G 512/12GB', usd: 450 },
+    { name: 'Poco X7 Ultra 512/16GB 5G', usd: 740 },
+    { name: 'Redmi 15 256/8GB', usd: 210 },
+    { name: 'Xiaomi 14T 512/12GB 5G', usd: 510 },
+    { name: 'Xiaomi 14T Pro 512/12GB 5G', usd: 599 },
+    { name: 'Xiaomi 15 5G 512/12GB', usd: 900 },
+    { name: 'Xiaomi 15 Ultra 512/16GB 5G', usd: 1250 },
+    { name: 'Xiaomi 15T 256/12GB 5G', usd: 550 },
+    { name: 'Xiaomi 15T 512/12GB', usd: 650 },
+    { name: 'Xiaomi 15T Pro 1TB/12GB Slim', usd: 900 },
+    { name: 'Xiaomi 15T Pro 1TB/12GB 5G', usd: 950 },
+    { name: 'Xiaomi 15T Pro 512/12GB con Cargador', usd: 880 },
+    { name: 'Poco X8 Pro 256/8GB 5G', usd: 420 },
+    { name: 'Poco X8 Pro Max 512/12GB 5G', usd: 600 },
+  ],
+  motorola: [
+    { name: 'Moto Edge 60 Pro 256/8GB 5G', usd: 490 },
+    { name: 'Moto Edge 70 512/12GB 5G', usd: 440 },
+    { name: 'Moto Edge 60 Fusión 256/12GB 5G', usd: 330 },
+    { name: 'Moto Edge 50 Ultra 1TB/16GB 5G', usd: 700 },
+    { name: 'Moto Edge 50 Pro 512/12GB 5G', usd: 440 },
+    { name: 'Moto Edge 50 Fusión 256/8GB', usd: 285 },
+    { name: 'Moto Edge 50 Neo 512/12GB 5G', usd: 360 },
+    { name: 'Moto Edge 50 Neo 256/12GB', usd: 300 },
+    { name: 'Moto Edge 50 512/12GB', usd: 360 },
+    { name: 'Moto G86 256/8GB 5G', usd: 290 },
+    { name: 'Moto G75 256/8GB 5G', usd: 250 },
+    { name: 'Moto G56 256/8GB 5G', usd: 240 },
+    { name: 'Moto G55 256/8GB 5G', usd: 220 },
+    { name: 'Moto G35 256/8GB', usd: 195 },
+    { name: 'Moto G15 256/4GB', usd: 150 },
+  ],
+  samsung: [
+    { name: 'Galaxy A16 128/4GB', usd: 155 },
+    { name: 'Galaxy A17 128/6GB 5G', usd: 250 },
+    { name: 'Galaxy A17 256/8GB', usd: 260 },
+    { name: 'Galaxy A26 128/6GB 5G', usd: 250 },
+    { name: 'Galaxy A26 256/8GB 5G', usd: 280 },
+    { name: 'Galaxy A36 256/8GB 5G', usd: 330 },
+    { name: 'Galaxy A56 256/8GB 5G', usd: 410 },
+    { name: 'Galaxy A56 256/12GB 5G', usd: 440 },
+    { name: 'Galaxy S24 FE 256/8GB', usd: 520 },
+    { name: 'Galaxy S25 FE 256/8GB', usd: 720 },
+    { name: 'Galaxy S25 FE 512/8GB', usd: 770 },
+    { name: 'Galaxy S25 256/12GB 5G', usd: 780 },
+    { name: 'Galaxy S25 Ultra 256/12GB 5G', usd: 1020 },
+    { name: 'Galaxy S25 Ultra 512/12GB 5G', usd: 1100 },
+    { name: 'Galaxy S26 256/12GB 5G', usd: 950 },
+    { name: 'Galaxy S26 512/12GB 5G', usd: 1050 },
+    { name: 'Galaxy S26 Plus 256/12GB 5G', usd: 1150 },
+    { name: 'Galaxy S26 Plus 512/12GB 5G', usd: 1280 },
+    { name: 'Galaxy S26 Ultra 512/12GB 5G', usd: 1390 },
+  ],
+  huawei: [
+    { name: 'Pura 80 Pro 512/12GB — Pantalla 6.8" · Cámara 50MP · Batería 5170mAh · Negro y Blanco', usd: 999 },
+  ],
+  google: [
+    { name: 'Pixel 10 256/12GB 5G', usd: 900 },
+  ],
+  iphone: [
+    { name: 'iPhone 13 128GB', usd: 550 },
+    { name: 'iPhone 14 128GB', usd: 570 },
+    { name: 'iPhone 15 128GB', usd: 720 },
+    { name: 'iPhone 16 128GB', usd: 800 },
+    { name: 'iPhone 17 256GB', usd: 960 },
+    { name: 'iPhone 17 Air 256GB', usd: 980 },
+    { name: 'iPhone 17 Pro 256GB', usd: 1340 },
+    { name: 'iPhone 17 Pro Max 256GB', usd: 1460 },
+  ]
+};
+
+const brandMeta = {
+  xiaomi:   { label: 'Xiaomi',   tagClass: 'brand-xiaomi-tag',    dotColor: '#ff8c42' },
+  motorola: { label: 'Motorola', tagClass: 'brand-motorola-tag',  dotColor: '#4d9aff' },
+  samsung:  { label: 'Samsung',  tagClass: 'brand-samsung-tag',   dotColor: '#8899ff' },
+  iphone:   { label: 'iPhone — Sellado',   tagClass: 'brand-iphone-tag',   dotColor: '#c8c8e0' },
+  notebook: { label: 'Notebooks', tagClass: 'brand-notebook-tag', dotColor: '#b094d4' },
+  huawei:   { label: 'Huawei',    tagClass: 'brand-huawei-tag',   dotColor: '#ff5a72' },
+  google:   { label: 'Google',    tagClass: 'brand-google-tag',   dotColor: '#34a853' },
+};
+
+let activeFilter = 'all';
+
+function setFilter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function formatNum(n) {
+  return n.toLocaleString('es-AR');
+}
+
+function makeCard(item, brand) {
+  const meta = brandMeta[brand];
+  const ars = item.ars ? item.ars : (item.usd * COTIZ);
+  const usdDisplay = item.usd ? item.usd.toLocaleString('es-AR') : null;
+  return `
+    <div class="card">
+      <span class="card-brand ${meta.tagClass}">${meta.label}</span>
+      <div class="card-name">${item.name}</div>
+      <div class="card-prices">
+        ${usdDisplay ? `<div class="price-usd">${usdDisplay}</div>` : `<div class="price-usd" style="font-size:0.85rem;color:var(--yellow)">Precio en pesos</div>`}
+        <div class="price-ars">
+          <span class="price-ars-val">$${formatNum(Math.round(ars))}</span>
+          <div style="font-size:0.68rem;margin-top:2px">en pesos</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderAll() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const main = document.getElementById('mainContent');
+  let html = '';
+  let total = 0;
+
+  const sections = activeFilter === 'all'
+    ? ['xiaomi', 'motorola', 'samsung', 'huawei', 'google', 'iphone', 'notebook']
+    : [activeFilter];
+
+  const sectionEmojis = { xiaomi: '🟠', motorola: '🔵', samsung: '🟣', huawei: '🔴', google: '🟢', iphone: '⚪', notebook: '💻' };
+  const sectionNames  = { xiaomi: 'Xiaomi', motorola: 'Motorola', samsung: 'Samsung', huawei: 'Huawei', google: 'Google Pixel', iphone: 'iPhone — Nuevos Sellados', notebook: 'Notebooks' };
+
+  sections.forEach(brand => {
+    const items = data[brand].filter(item =>
+      !q || item.name.toLowerCase().includes(q)
+    );
+    if (!items.length) return;
+    total += items.length;
+    const meta = brandMeta[brand];
+    html += `<div class="section-title">
+      <span class="section-dot" style="background:${meta.dotColor}"></span>
+      ${sectionNames[brand]}
+    </div>`;
+    html += `<div class="grid">`;
+    items.forEach(item => { html += makeCard(item, brand); });
+    html += `</div>`;
+  });
+
+  if (!total) {
+    html = `<div class="grid"><div class="empty"><div class="empty-icon">🔍</div>No se encontraron productos para "<strong>${q}</strong>"</div></div>`;
+  }
+
+  main.innerHTML = html;
+  document.getElementById('countLabel').innerHTML = total
+    ? `<span>${total}</span> producto${total !== 1 ? 's' : ''} encontrado${total !== 1 ? 's' : ''}`
+    : '';
+}
+
+renderAll();
+</script>
+</body>
+</html>
