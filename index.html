@@ -160,7 +160,7 @@
   .filter-btn.brand-motorola.active { background: #005af0; border-color: #005af0; box-shadow: 0 0 16px rgba(0,90,240,0.3); }
   .filter-btn.brand-samsung.active { background: #1428a0; border-color: #1428a0; box-shadow: 0 0 16px rgba(20,40,160,0.3); }
   .filter-btn.brand-iphone.active { background: #e8e8f0; border-color: #e8e8f0; color: #000; box-shadow: 0 0 16px rgba(232,232,240,0.3); }
-  .filter-btn.brand-notebook.active { background: #7b5ea7; border-color: #7b5ea7; box-shadow: 0 0 16px rgba(123,94,167,0.3); }
+  .filter-btn.brand-macbook.active { background: #a0a0b0; border-color: #a0a0b0; color: #000; box-shadow: 0 0 16px rgba(160,160,176,0.3); }
   .filter-btn.brand-huawei.active { background: #cf0a2c; border-color: #cf0a2c; box-shadow: 0 0 16px rgba(207,10,44,0.3); }
   .filter-btn.brand-google.active { background: #34a853; border-color: #34a853; box-shadow: 0 0 16px rgba(52,168,83,0.3); }
 
@@ -243,7 +243,7 @@
   .brand-motorola-tag { background: rgba(0,90,240,0.15); color: #4d9aff; }
   .brand-samsung-tag { background: rgba(20,40,160,0.15); color: #8899ff; }
   .brand-iphone-tag { background: rgba(232,232,240,0.1); color: #c8c8e0; }
-  .brand-notebook-tag { background: rgba(123,94,167,0.15); color: #b094d4; }
+  .brand-macbook-tag { background: rgba(160,160,176,0.12); color: #c0c0d0; }
   .brand-huawei-tag { background: rgba(207,10,44,0.15); color: #ff5a72; }
   .brand-google-tag { background: rgba(52,168,83,0.15); color: #5ecf7a; }
 
@@ -434,7 +434,7 @@
     <button class="filter-btn brand-motorola" onclick="setFilter('motorola', this)">📱 Motorola</button>
     <button class="filter-btn brand-samsung" onclick="setFilter('samsung', this)">📱 Samsung</button>
     <button class="filter-btn brand-iphone" onclick="setFilter('iphone', this)">🍎 iPhone</button>
-    <button class="filter-btn brand-notebook" onclick="setFilter('notebook', this)">💻 Notebooks</button>
+    <button class="filter-btn brand-macbook" onclick="setFilter('macbook', this)">💻 MacBook</button>
     <button class="filter-btn brand-huawei" onclick="setFilter('huawei', this)">📱 Huawei</button>
     <button class="filter-btn brand-google" onclick="setFilter('google', this)">📱 Google</button>
   </div>
@@ -451,10 +451,18 @@
 const COTIZ = 1430;
 
 const data = {
-  notebook: [
-    { name: 'ASUS imaginebook MJ401T Intel M3 8th Gen 14" 4GB RAM 128GB SSD', usd: null, ars: 135000 },
-    { name: 'DELL Core i5 1035G4 10ma 14" 4GB 128GB SSD Win10', usd: null, ars: 195000 },
-    { name: 'Gateway GWTN156 AMD Ryzen™ 5 3450U 2.1GHz 256GB SSD 16GB 15.6" FHD', usd: null, ars: 160000 },
+  macbook: [
+    { name: 'Mac Mini M1 512GB/8GB', usd: 700 },
+    { name: 'MacBook Air 15" M3 256GB/16GB', usd: 1140 },
+    { name: 'MacBook Air 15" M4 256GB/16GB', usd: 1335 },
+    { name: 'MacBook Air 13" M4 512GB/24GB', usd: 1600 },
+    { name: 'MacBook Air 15" M3 512GB/24GB', usd: 1600 },
+    { name: 'MacBook Air 15" M4 512GB/24GB', usd: 1790 },
+    { name: 'MacBook Pro 14" M5 512GB/16GB', usd: 1980 },
+    { name: 'MacBook Pro 14" M5 1TB/16GB', usd: 2190 },
+    { name: 'MacBook Pro 14" M4 Pro 512GB/24GB', usd: 2250 },
+    { name: 'MacBook Pro 14" M5 1TB/24GB', usd: 2750 },
+    { name: 'MacBook Pro 14" M4 Max 1TB/36GB', usd: 3420 },
   ],
   xiaomi: [
     { name: 'Redmi 15C 256/8GB', usd: 180 },
@@ -558,7 +566,7 @@ const brandMeta = {
   motorola: { label: 'Motorola', tagClass: 'brand-motorola-tag',  dotColor: '#4d9aff' },
   samsung:  { label: 'Samsung',  tagClass: 'brand-samsung-tag',   dotColor: '#8899ff' },
   iphone:   { label: 'iPhone — Sellado',   tagClass: 'brand-iphone-tag',   dotColor: '#c8c8e0' },
-  notebook: { label: 'Notebooks', tagClass: 'brand-notebook-tag', dotColor: '#b094d4' },
+  macbook:  { label: 'MacBook',   tagClass: 'brand-macbook-tag',  dotColor: '#a0a0b0' },
   huawei:   { label: 'Huawei',    tagClass: 'brand-huawei-tag',   dotColor: '#ff5a72' },
   google:   { label: 'Google',    tagClass: 'brand-google-tag',   dotColor: '#34a853' },
 };
@@ -601,11 +609,11 @@ function renderAll() {
   let total = 0;
 
   const sections = activeFilter === 'all'
-    ? ['xiaomi', 'motorola', 'samsung', 'huawei', 'google', 'iphone', 'notebook']
+    ? ['xiaomi', 'motorola', 'samsung', 'huawei', 'google', 'iphone', 'macbook']
     : [activeFilter];
 
-  const sectionEmojis = { xiaomi: '🟠', motorola: '🔵', samsung: '🟣', huawei: '🔴', google: '🟢', iphone: '⚪', notebook: '💻' };
-  const sectionNames  = { xiaomi: 'Xiaomi', motorola: 'Motorola', samsung: 'Samsung', huawei: 'Huawei', google: 'Google Pixel', iphone: 'iPhone — Nuevos Sellados', notebook: 'Notebooks' };
+  const sectionEmojis = { xiaomi: '🟠', motorola: '🔵', samsung: '🟣', huawei: '🔴', google: '🟢', iphone: '⚪', macbook: '💻' };
+  const sectionNames  = { xiaomi: 'Xiaomi', motorola: 'Motorola', samsung: 'Samsung', huawei: 'Huawei', google: 'Google Pixel', iphone: 'iPhone — Nuevos Sellados', macbook: 'MacBook' };
 
   sections.forEach(brand => {
     const items = data[brand].filter(item =>
