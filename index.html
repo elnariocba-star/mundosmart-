@@ -79,7 +79,7 @@
 <header>
   <div class="header-inner">
     <div class="logo">MUNDO<span>_</span>SMART</div>
-    <div class="cotiz-badge"><span class="cotiz-label">💵 Cotización del día</span><span class="cotiz-value">$1.430</span></div>
+    <div class="cotiz-badge"><span class="cotiz-label">💵 Cotización del día</span><span class="cotiz-value">$1.500</span></div>
   </div>
 </header>
 <div class="info-bar">
@@ -117,7 +117,7 @@
 <main id="mainContent"></main>
 <a class="wa-float" href="https://wa.me/543517516612" target="_blank">💬 Consultar por WhatsApp</a>
 <script>
-const COTIZ=1430;
+const COTIZ=1500;
 const data={
   xiaomi:[
     {name:'Redmi 15C 256/8GB',usd:190},
@@ -217,13 +217,13 @@ const data={
     {name:'Pixel 10 256/12GB 5G',usd:900},
   ],
   iphone:[
-    {name:'iPhone 13 128GB',usd:580},
-    {name:'iPhone 15 128GB',usd:700},
-    {name:'iPhone 16 128GB',usd:800},
-    {name:'iPhone 17 256GB',usd:910},
-    {name:'iPhone 17 Air 256GB',usd:1050},
-    {name:'iPhone 17 Pro 256GB',usd:1370},
-    {name:'iPhone 17 Pro Max 256GB',usd:1500},
+    {name:'iPhone 13 128GB',consultar:true},
+    {name:'iPhone 15 128GB',consultar:true},
+    {name:'iPhone 16 128GB',consultar:true},
+    {name:'iPhone 17 256GB',consultar:true},
+    {name:'iPhone 17 Air 256GB',consultar:true},
+    {name:'iPhone 17 Pro 256GB',consultar:true},
+    {name:'iPhone 17 Pro Max 256GB',consultar:true},
   ],
   macbook:[
     {name:'Mac Mini M1 512GB/8GB',usd:700},
@@ -265,6 +265,9 @@ function setFilter(f,btn){activeFilter=f;document.querySelectorAll('.filter-btn'
 function formatNum(n){return n.toLocaleString('es-AR');}
 function makeCard(item,brand){
   const meta=brandMeta[brand];
+  if(item.consultar){
+    return `<div class="card"><span class="card-brand ${meta.tagClass}">${meta.label}</span><div class="card-name">${item.name}</div><div class="card-prices"><div class="price-usd" style="font-size:1rem;color:#ff3cac;letter-spacing:1px">CONSULTAR</div><a href="https://wa.me/543517516612?text=Hola!%20consulto%20por%20${encodeURIComponent(item.name)}" target="_blank" style="font-size:0.75rem;color:#25d366;text-decoration:none;border:1px solid #25d366;border-radius:8px;padding:4px 10px;">💬 WhatsApp</a></div></div>`;
+  }
   const ars=item.ars?item.ars:(item.usd*COTIZ);
   const usdDisplay=item.usd?item.usd.toLocaleString('es-AR'):null;
   return `<div class="card"><span class="card-brand ${meta.tagClass}">${meta.label}</span><div class="card-name">${item.name}</div><div class="card-prices">${usdDisplay?`<div class="price-usd">${usdDisplay}</div>`:`<div class="price-usd" style="font-size:0.85rem;color:var(--yellow)">Precio en pesos</div>`}<div class="price-ars"><span class="price-ars-val">$${formatNum(Math.round(ars))}</span><div style="font-size:0.68rem;margin-top:2px">en pesos</div></div></div></div>`;
